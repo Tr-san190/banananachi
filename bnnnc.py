@@ -13,8 +13,7 @@ from os import path
 # バナナのバナナは ...  [  ...  while(*p){
 # ナナチのナナチは ...  ]  ...  }
 
-def bnnncParser(f):
-  bnnncCode = f.read()
+def bnnnc2bfConverter(bnnncCode):
   bfCode = bnnncCode.replace("\n", "")
   bfCode = bfCode.replace("バナナナチ",     ">")
   bfCode = bfCode.replace("バナチ",        "<")
@@ -26,8 +25,7 @@ def bnnncParser(f):
   bfCode = bfCode.replace("ナナチのナナチは", "]")
   return bfCode
 
-def bnnncConverter(f):
-  bfCode = f.read()
+def bf2bnnncConverter(bfCode):
   bnnncCode = bfCode.replace("\n", "")
   bnnncCode = bnnncCode.replace(">", "バナナナチ")
   bnnncCode = bnnncCode.replace("<", "バナチ")
@@ -39,24 +37,78 @@ def bnnncConverter(f):
   bnnncCode = bnnncCode.replace("]", "ナナチのナナチは")
   return bnnncCode
 
+def testBnnnc():
+  print("Test for bnnnc\n")
+  print("----------------------------")
+  print("Case 1")
+  print("----------------------------\n")
+
+  srcFilePath = "test.bnnnc"
+  f = open(srcFilePath, "r")
+  src = f.read()
+  f.close()
+
+  src = src.replace("\n", "")
+
+  bf = bnnnc2bfConverter(src)
+  bnnnc = bf2bnnncConverter(bf)
+
+  print("Input :")
+  print(src)
+  print("")
+  print("Output :")
+  print(bnnnc)
+  print("")
+  print("Comparison :")
+  print(bnnnc == src)
+  print("")
+
+  print("----------------------------")
+  print("Case 2")
+  print("----------------------------\n")
+
+  srcFilePath = "test.bf"
+  f = open(srcFilePath, "r")
+  src = f.read()
+  f.close()
+
+  src = src.replace("\n", "")
+
+  bnnnc = bf2bnnncConverter(src)
+  bf = bnnnc2bfConverter(bnnnc)
+
+  print("Input :")
+  print(src)
+  print("")
+  print("Output :")
+  print(bf)
+  print("")
+  print("Comparison :")
+  print(bf == src)
+  print("")
+
 if __name__ == '__main__':
   if len(sys.argv) >= 2:
     srcFilePath = sys.argv[1];
-  else:
-    srcFilePath = "test.bf"
 
-  srcFileExt = path.splitext(path.basename(srcFilePath))
-  if len(srcFileExt) == 2:
-    srcFileExt = srcFileExt[1]
-  else:
-    srcFileExt = ""
-#  print(path.splitext(path.basename(srcFilePath))[0])
-#  print(path.splitext(path.basename(srcFilePath))[1])
-  f = open(srcFilePath, "r")
+    srcFileExt = path.splitext(path.basename(srcFilePath))
+    if len(srcFileExt) == 2:
+      srcFileExt = srcFileExt[1]
+    else:
+      srcFileExt = ""
 
-  if srcFileExt == ".bnnnc":
-    bf = bnnncParser(f)
-    print(bf)
-  elif srcFileExt == ".bf":
-    bnnnc = bnnncConverter(f)
-    print(bnnnc)
+    f = open(srcFilePath, "r")
+    src = f.read()
+    f.close()
+
+    if srcFileExt == ".bnnnc":
+      bf = bnnnc2bfConverter(src)
+      print(bf)
+    elif srcFileExt == ".bf":
+      bnnnc = bf2bnnncConverter(src)
+      print(bnnnc)
+    else:
+      print("Invalid src file.")
+
+  else:
+    testBnnnc()
