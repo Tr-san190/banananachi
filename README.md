@@ -1,2 +1,2 @@
 # banananachi
-Banananachi
+It is Banananachi <-> Brainf\*ck converter.
